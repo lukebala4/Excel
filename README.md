@@ -62,32 +62,32 @@ IF(ISNUMBER(SEARCH("keyword", G342)), "ABBREVIATION", "")
 
 | Abbreviation | Full Name | Keywords Matched |
 |---|---|---|
-| **RA** | Rheumatoid Arthritis | "Rheumatoid Arthritis", " RA ", " RA,", " RA:", " RA-", "(RA)", end-of-title " RA" |
+| **RA** | Rheumatoid Arthritis | "Rheumatoid Arthritis", " RA ", " RA,", " RA:", " RA-", "(RA)", end-of-title " RA", start-of-title "RA-"/"RA " |
 | **PsA** | Psoriatic Arthritis | "Psoriatic", " PsA ", " PsA,", " PsA-", "(PsA)", end-of-title " PsA" |
 | **PsO** | Psoriasis | "Psoriasis" (only when "Psoriatic" is NOT also present) |
 | **AxSpA** | Axial Spondyloarthritis | "Spondyloarthritis" + "axial", or "axSpA" |
 | **pSpA** | Peripheral Spondyloarthritis | "Spondyloarthritis" + "peripheral", or "pSpA" |
 | **AS** | Ankylosing Spondylitis | "Ankylosing Spondylitis" |
 | **SpA** | Spondyloarthritis (generic) | "Spondyloarthritis"/"Spondylarthritis"/" SpA " (only when no axial/peripheral/ankylosing qualifier) |
-| **SSc** | Systemic Sclerosis | "Systemic Sclerosis", "Scleroderma", " SSc", "(SSc)" |
+| **SSc** | Systemic Sclerosis | "Systemic Sclerosis", "Scleroderma", " SSc", "(SSc)", "SSc-" |
 | **SLE** | Systemic Lupus Erythematosus | "Lupus Erythematosus" (excl. Cutaneous), "Systemic Lupus", " SLE ", bare "Lupus" |
 | **LN** | Lupus Nephritis | "Lupus Nephritis", " LN ", "(LN)" |
 | **CLE** | Cutaneous Lupus Erythematosus | "Cutaneous Lupus" |
 | **MCTD** | Mixed Connective Tissue Disease | "Mixed Connective Tissue", "MCTD" |
 | **JIA** | Juvenile Idiopathic Arthritis | "Juvenile Idiopathic Arthritis", " JIA", "(JIA)" |
-| **GCA** | Giant Cell Arteritis | "Giant Cell Arteritis", " GCA ", " GCA,", " GCA:", "(GCA)", "-GCA" |
-| **PMR** | Polymyalgia Rheumatica | "Polymyalgia Rheumatica", " PMR ", " PMR,", "(PMR)" |
+| **GCA** | Giant Cell Arteritis | "Giant Cell Arteritis", " GCA ", " GCA,", " GCA:", "(GCA)", "-GCA", end-of-title " GCA" |
+| **PMR** | Polymyalgia Rheumatica | "Polymyalgia Rheumatica", " PMR ", " PMR,", "(PMR)", start-of-title "PMR "/"PMR-" |
 | **TAK** | Takayasu Arteritis | "Takayasu", " TAK ", " TAK,", "&TAK", "(TAK)", end-of-title " TAK" |
 | **LVV** | Large Vessel Vasculitis | "Large Vessel Vasculitis", "Large Vessel GCA", "LVV" |
 | **AAV** | ANCA-Associated Vasculitis | " ANCA", " AAV", "(AAV)" |
 | **EGPA** | Eosinophilic Granulomatosis with Polyangiitis | "EGPA", "Eosinophilic Granulomatosis" |
 | **BD** | Behcet's Disease | "Behcet", "Behcet" (with and without accent) |
 | **SjD** | Sjogren's Disease | "Sjogren", "Sjogren" (with and without accent) |
-| **IIM** | Idiopathic Inflammatory Myopathy | "Myositis", "Myopath", " IIM" |
-| **ILD** | Interstitial Lung Disease | "Interstitial Lung", "-ILD", " ILD ", " ILD," |
-| **APS** | Antiphospholipid Syndrome | "Antiphospholipid" |
+| **IIM** | Idiopathic Inflammatory Myopathy | "Myositis", " Myopath" (leading space), " IIM", "Synthetase" |
+| **ILD** | Interstitial Lung Disease | "Interstitial Lung", "-ILD", " ILD ", " ILD,", end-of-title " ILD" |
+| **APS** | Antiphospholipid Syndrome | "Antiphospholipid", " APS ", " APS,", "(APS)", end-of-title " APS", start-of-title "APS " |
 | **IgG4-RD** | IgG4-Related Disease | "IgG4" |
-| **AOSD** | Adult-Onset Still's Disease | "Still's", "Still D", "AOSD" |
+| **AOSD** | Adult-Onset Still's Disease | "Still's" (straight/curly/backtick apostrophe), "Still D", "AOSD" |
 | **FMF** | Familial Mediterranean Fever | "Familial Mediterranean Fever", " FMF" |
 | **CPPD** | Calcium Pyrophosphate Deposition Disease | "CPPD", "Calcium Pyrophosphate" |
 | **Gout** | Gout | "Gout" |
@@ -139,8 +139,12 @@ For short abbreviations (RA, SLE, GCA, etc.), the formula uses **word-boundary p
 | `" RA-"` | Followed by dash (e.g., "RA-ILD") |
 | `"(RA)"` | In parentheses |
 | `RIGHT(G,3)=" RA"` | End of title |
+| `LEFT(G,3)="RA "` | Start of title (followed by space) |
+| `LEFT(G,3)="RA-"` | Start of title (followed by dash) |
 
 This prevents accidental matches on common words. For example, `" SpA"` without boundaries would match "space", "Spain", "spatial" - so SpA specifically uses `" SpA "`, `" SpA,"`, `" SpA:"`, `" SpA."`, `"(SpA)"`, and `RIGHT(G,4)=" SpA"`.
+
+The formula also uses `LEFT()` checks for abbreviations that may appear at the start of a title (RA, PMR, APS) and `RIGHT()` checks for abbreviations at the end of a title (RA, GCA, ILD, APS, SpA, SLE, PsA, TAK).
 
 ## Known Limitations
 
